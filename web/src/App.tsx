@@ -1,7 +1,7 @@
 import { createContext, type FormEvent, type ReactNode, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, NavLink, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
-  ArrowLeft, ArrowRight, Check, ChevronRight, Clock3, Heart, Home, ImagePlus, LogOut,
+  ArrowLeft, ArrowRight, Check, ChevronRight, Clock3, Eye, EyeOff, Heart, Home, ImagePlus, LogOut,
   Menu, Plus, Search, Settings2, Sparkles, Trash2, Utensils, UserRound, X,
 } from "lucide-react";
 import { api, tokenStore } from "./api";
@@ -47,7 +47,7 @@ function AppProvider({ children }: { children: ReactNode }) {
     const session = await api.login({ email, password }); tokenStore.save(session); setUser(session.user);
   };
   const signUp = async (displayName: string, email: string, password: string) => {
-    await api.register({ displayName, email, password }); await signIn(email, password);
+    await api.register({ displayName, email, password });
   };
   const signOut = async () => {
     try { await api.logout(); } catch { /* local sign-out remains available offline */ }
@@ -109,8 +109,10 @@ function Shell({ children }: { children: ReactNode }) {
 function AuthPage({ register = false }: { register?: boolean }) {
   const { user, signIn, signUp } = useApp();
   const navigate = useNavigate();
-  const [name, setName] = useState(""); const [email, setEmail] = useState(""); const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState(""); const [error, setError] = useState(""); const [busy, setBusy] = useState(false);
+  const location = useLocation();
+  const [name, setName] = useState(""); const [email, setEmail] = useState((location.state as { email?: string } | null)?.email ?? ""); const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState(""); const [error, setError] = useState(""); const [busy, setBusy] = useState(false); const [showPassword, setShowPassword] = useState(false); const [showConfirm, setShowConfirm] = useState(false);
+  const registeredNotice = !register && Boolean((location.state as { registered?: boolean } | null)?.registered);
   if (user) return <Navigate to="/" replace />;
   const submit = async (event: FormEvent) => {
     event.preventDefault(); setError("");
@@ -119,7 +121,10 @@ function AuthPage({ register = false }: { register?: boolean }) {
     if (register && password.length < 8) return setError("Mật khẩu cần ít nhất 8 ký tự.");
     if (register && password !== confirm) return setError("Mật khẩu xác nhận chưa khớp.");
     setBusy(true);
-    try { register ? await signUp(name.trim(), email.trim(), password) : await signIn(email.trim(), password); navigate("/"); }
+    try {
+      if (register) { await signUp(name.trim(), email.trim(), password); navigate("/login", { replace: true, state: { registered: true, email: email.trim() } }); }
+      else { await signIn(email.trim(), password); navigate("/", { replace: true }); }
+    }
     catch (err) { setError(err instanceof Error ? err.message : "Không thể đăng nhập."); }
     finally { setBusy(false); }
   };
@@ -136,10 +141,11 @@ function AuthPage({ register = false }: { register?: boolean }) {
         <span className="eyebrow">{register ? "BẮT ĐẦU NGAY" : "CHÀO MỪNG TRỞ LẠI"}</span>
         <h2>{register ? "Tạo tài khoản" : "Đăng nhập"}</h2>
         <p>{register ? "Lưu món yêu thích và lịch sử của riêng bạn." : "Tiếp tục hành trình khám phá món ngon."}</p>
+        {registeredNotice && <p className="form-success" role="status">Tạo tài khoản thành công. Hãy đăng nhập để tiếp tục.</p>}
         {register && <Field label="Tên hiển thị"><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Tên của bạn" autoComplete="name" /></Field>}
         <Field label="Email"><input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" type="email" autoComplete="email" /></Field>
-        <Field label="Mật khẩu"><input value={password} onChange={(e) => setPassword(e.target.value)} placeholder={register ? "Ít nhất 8 ký tự" : "••••••••"} type="password" autoComplete={register ? "new-password" : "current-password"} /></Field>
-        {register && <Field label="Xác nhận mật khẩu"><input value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="Nhập lại mật khẩu" type="password" autoComplete="new-password" /></Field>}
+        <Field label="Mật khẩu"><span className="password-field"><input value={password} onChange={(e) => setPassword(e.target.value)} placeholder={register ? "Ít nhất 8 ký tự" : "••••••••"} type={showPassword ? "text" : "password"} autoComplete={register ? "new-password" : "current-password"} /><button type="button" className="password-toggle" onClick={() => setShowPassword(value => !value)} aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}>{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</button></span></Field>
+        {register && <Field label="Xác nhận mật khẩu"><span className="password-field"><input value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="Nhập lại mật khẩu" type={showConfirm ? "text" : "password"} autoComplete="new-password" /><button type="button" className="password-toggle" onClick={() => setShowConfirm(value => !value)} aria-label={showConfirm ? "Ẩn mật khẩu xác nhận" : "Hiện mật khẩu xác nhận"}>{showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}</button></span></Field>}
         {error && <p className="form-error" role="alert">{error}</p>}
         <Button disabled={busy} type="submit">{busy ? "ĐANG XỬ LÝ..." : register ? "TẠO TÀI KHOẢN" : "ĐĂNG NHẬP"}<ArrowRight size={18} /></Button>
         <p className="auth-switch">{register ? "Đã có tài khoản?" : "Chưa có tài khoản?"} <NavLink to={register ? "/login" : "/register"}>{register ? "Đăng nhập" : "Đăng ký miễn phí"}</NavLink></p>
