@@ -1,0 +1,54 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: foodspin_db
+      POSTGRES_USER: foodspin
+      POSTGRES_PASSWORD: foodspin_local_password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U foodspin -d foodspin_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    volumes:
+      - foodspin_pgdata:/var/lib/postgresql/data
+      - ./BE/database/001_schema.sql:/docker-entrypoint-initdb.d/001_schema.sql:ro
+      - ./BE/database/002_seed_categories.sql:/docker-entrypoint-initdb.d/002_seed_categories.sql:ro
+      - ./BE/database/003_seed_default_foods.sql:/docker-entrypoint-initdb.d/003_seed_default_foods.sql:ro
+
+  api:
+    build:
+      context: ./BE
+      dockerfile: Dockerfile
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      WEB_ORIGIN: http://localhost:5173
+      DATABASE_URL: postgresql://foodspin:foodspin_local_password@db:5432/foodspin_db?schema=public
+      JWT_ACCESS_SECRET: foodspin_local_access_secret_change_this_in_real_deployments
+      JWT_REFRESH_SECRET: foodspin_local_refresh_secret_change_this_in_real_deployments
+      JWT_ACCESS_EXPIRES_IN: 15m
+      JWT_REFRESH_EXPIRES_IN: 7d
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        VITE_STORAGE_MODE: api
+        VITE_API_URL: ""
+    depends_on:
+      - api
+    ports:
+      - "5173:80"
+
+volumes:
+  foodspin_pgdata:

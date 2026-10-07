@@ -929,6 +929,7 @@ export const FoodsScalarFieldEnum = {
   category_id: 'category_id',
   name: 'name',
   image_url: 'image_url',
+  image_public_id: 'image_public_id',
   description: 'description',
   spicy: 'spicy',
   vegetarian: 'vegetarian',
@@ -944,6 +945,9 @@ export const Spin_historyScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
   food_id: 'food_id',
+  food_name: 'food_name',
+  food_image_url: 'food_image_url',
+  food_category_name: 'food_category_name',
   filters: 'filters',
   spun_at: 'spun_at'
 } as const

@@ -118,7 +118,7 @@ export async function remove(req: Request, res: Response) {
     return res.status(403).json({ success: false, message: "System foods cannot be deleted" });
   }
 
-  await deleteFood(id);
+  await deleteFood(id, food.image_public_id);
   return res.json({ success: true, data: { deleted: true, foodId: id } });
 }
 

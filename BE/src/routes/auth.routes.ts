@@ -2,12 +2,13 @@ import { Router } from "express";
 
 import { requireAuth } from "../middleware/auth.middleware.js";
 import { login, logout, me, refresh, register } from "../controllers/auth.controller.js";
+import { authRateLimit } from "../middleware/rate-limit.middleware.js";
 
 const router = Router();
 
-router.post("/register", register);
-router.post("/login", login);
-router.post("/refresh", refresh);
+router.post("/register", authRateLimit, register);
+router.post("/login", authRateLimit, login);
+router.post("/refresh", authRateLimit, refresh);
 router.post("/logout", logout);
 router.get("/me", requireAuth, me);
 

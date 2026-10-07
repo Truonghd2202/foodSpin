@@ -2,12 +2,16 @@ import { getCloudinary } from "../config/cloudinary.js";
 
 export type UploadedImage = {
   secureUrl: string;
-  publicId?: string;
+  publicId: string;
 };
 
-export async function uploadImage(file: Express.Multer.File): Promise<UploadedImage> {
-  if (!file?.buffer) {
+export async function uploadImage(buffer: Buffer, mimeType: string): Promise<UploadedImage> {
+  if (!buffer.length) {
     throw new Error("IMAGE_REQUIRED");
+  }
+
+  if (!["image/jpeg", "image/png", "image/webp"].includes(mimeType)) {
+    throw new Error("INVALID_IMAGE_TYPE");
   }
 
   const cloudinary = getCloudinary();
@@ -25,6 +29,11 @@ export async function uploadImage(file: Express.Multer.File): Promise<UploadedIm
       },
     );
 
-    stream.end(file.buffer);
+    stream.end(buffer);
   });
+}
+
+export async function deleteImage(publicId: string): Promise<void> {
+  const cloudinary = getCloudinary();
+  await cloudinary.uploader.destroy(publicId, { resource_type: "image", invalidate: true });
 }

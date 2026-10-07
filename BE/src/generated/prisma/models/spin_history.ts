@@ -28,6 +28,9 @@ export type Spin_historyMinAggregateOutputType = {
   id: string | null
   user_id: string | null
   food_id: string | null
+  food_name: string | null
+  food_image_url: string | null
+  food_category_name: string | null
   spun_at: Date | null
 }
 
@@ -35,6 +38,9 @@ export type Spin_historyMaxAggregateOutputType = {
   id: string | null
   user_id: string | null
   food_id: string | null
+  food_name: string | null
+  food_image_url: string | null
+  food_category_name: string | null
   spun_at: Date | null
 }
 
@@ -42,6 +48,9 @@ export type Spin_historyCountAggregateOutputType = {
   id: number
   user_id: number
   food_id: number
+  food_name: number
+  food_image_url: number
+  food_category_name: number
   filters: number
   spun_at: number
   _all: number
@@ -52,6 +61,9 @@ export type Spin_historyMinAggregateInputType = {
   id?: true
   user_id?: true
   food_id?: true
+  food_name?: true
+  food_image_url?: true
+  food_category_name?: true
   spun_at?: true
 }
 
@@ -59,6 +71,9 @@ export type Spin_historyMaxAggregateInputType = {
   id?: true
   user_id?: true
   food_id?: true
+  food_name?: true
+  food_image_url?: true
+  food_category_name?: true
   spun_at?: true
 }
 
@@ -66,6 +81,9 @@ export type Spin_historyCountAggregateInputType = {
   id?: true
   user_id?: true
   food_id?: true
+  food_name?: true
+  food_image_url?: true
+  food_category_name?: true
   filters?: true
   spun_at?: true
   _all?: true
@@ -146,7 +164,10 @@ export type spin_historyGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type Spin_historyGroupByOutputType = {
   id: string
   user_id: string
-  food_id: string
+  food_id: string | null
+  food_name: string
+  food_image_url: string
+  food_category_name: string | null
   filters: runtime.JsonValue | null
   spun_at: Date
   _count: Spin_historyCountAggregateOutputType | null
@@ -175,17 +196,23 @@ export type spin_historyWhereInput = {
   NOT?: Prisma.spin_historyWhereInput | Prisma.spin_historyWhereInput[]
   id?: Prisma.UuidFilter<"spin_history"> | string
   user_id?: Prisma.UuidFilter<"spin_history"> | string
-  food_id?: Prisma.UuidFilter<"spin_history"> | string
+  food_id?: Prisma.UuidNullableFilter<"spin_history"> | string | null
+  food_name?: Prisma.StringFilter<"spin_history"> | string
+  food_image_url?: Prisma.StringFilter<"spin_history"> | string
+  food_category_name?: Prisma.StringNullableFilter<"spin_history"> | string | null
   filters?: Prisma.JsonNullableFilter<"spin_history">
   spun_at?: Prisma.DateTimeFilter<"spin_history"> | Date | string
-  foods?: Prisma.XOR<Prisma.FoodsScalarRelationFilter, Prisma.foodsWhereInput>
+  foods?: Prisma.XOR<Prisma.FoodsNullableScalarRelationFilter, Prisma.foodsWhereInput> | null
   users?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
 }
 
 export type spin_historyOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
-  food_id?: Prisma.SortOrder
+  food_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  food_name?: Prisma.SortOrder
+  food_image_url?: Prisma.SortOrder
+  food_category_name?: Prisma.SortOrderInput | Prisma.SortOrder
   filters?: Prisma.SortOrderInput | Prisma.SortOrder
   spun_at?: Prisma.SortOrder
   foods?: Prisma.foodsOrderByWithRelationInput
@@ -198,17 +225,23 @@ export type spin_historyWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.spin_historyWhereInput[]
   NOT?: Prisma.spin_historyWhereInput | Prisma.spin_historyWhereInput[]
   user_id?: Prisma.UuidFilter<"spin_history"> | string
-  food_id?: Prisma.UuidFilter<"spin_history"> | string
+  food_id?: Prisma.UuidNullableFilter<"spin_history"> | string | null
+  food_name?: Prisma.StringFilter<"spin_history"> | string
+  food_image_url?: Prisma.StringFilter<"spin_history"> | string
+  food_category_name?: Prisma.StringNullableFilter<"spin_history"> | string | null
   filters?: Prisma.JsonNullableFilter<"spin_history">
   spun_at?: Prisma.DateTimeFilter<"spin_history"> | Date | string
-  foods?: Prisma.XOR<Prisma.FoodsScalarRelationFilter, Prisma.foodsWhereInput>
+  foods?: Prisma.XOR<Prisma.FoodsNullableScalarRelationFilter, Prisma.foodsWhereInput> | null
   users?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
 }, "id">
 
 export type spin_historyOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
-  food_id?: Prisma.SortOrder
+  food_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  food_name?: Prisma.SortOrder
+  food_image_url?: Prisma.SortOrder
+  food_category_name?: Prisma.SortOrderInput | Prisma.SortOrder
   filters?: Prisma.SortOrderInput | Prisma.SortOrder
   spun_at?: Prisma.SortOrder
   _count?: Prisma.spin_historyCountOrderByAggregateInput
@@ -222,39 +255,54 @@ export type spin_historyScalarWhereWithAggregatesInput = {
   NOT?: Prisma.spin_historyScalarWhereWithAggregatesInput | Prisma.spin_historyScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"spin_history"> | string
   user_id?: Prisma.UuidWithAggregatesFilter<"spin_history"> | string
-  food_id?: Prisma.UuidWithAggregatesFilter<"spin_history"> | string
+  food_id?: Prisma.UuidNullableWithAggregatesFilter<"spin_history"> | string | null
+  food_name?: Prisma.StringWithAggregatesFilter<"spin_history"> | string
+  food_image_url?: Prisma.StringWithAggregatesFilter<"spin_history"> | string
+  food_category_name?: Prisma.StringNullableWithAggregatesFilter<"spin_history"> | string | null
   filters?: Prisma.JsonNullableWithAggregatesFilter<"spin_history">
   spun_at?: Prisma.DateTimeWithAggregatesFilter<"spin_history"> | Date | string
 }
 
 export type spin_historyCreateInput = {
   id?: string
+  food_name: string
+  food_image_url: string
+  food_category_name?: string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Date | string
-  foods: Prisma.foodsCreateNestedOneWithoutSpin_historyInput
+  foods?: Prisma.foodsCreateNestedOneWithoutSpin_historyInput
   users: Prisma.usersCreateNestedOneWithoutSpin_historyInput
 }
 
 export type spin_historyUncheckedCreateInput = {
   id?: string
   user_id: string
-  food_id: string
+  food_id?: string | null
+  food_name: string
+  food_image_url: string
+  food_category_name?: string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Date | string
 }
 
 export type spin_historyUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  food_name?: Prisma.StringFieldUpdateOperationsInput | string
+  food_image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  food_category_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  foods?: Prisma.foodsUpdateOneRequiredWithoutSpin_historyNestedInput
+  foods?: Prisma.foodsUpdateOneWithoutSpin_historyNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutSpin_historyNestedInput
 }
 
 export type spin_historyUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
-  food_id?: Prisma.StringFieldUpdateOperationsInput | string
+  food_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  food_name?: Prisma.StringFieldUpdateOperationsInput | string
+  food_image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  food_category_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -262,13 +310,19 @@ export type spin_historyUncheckedUpdateInput = {
 export type spin_historyCreateManyInput = {
   id?: string
   user_id: string
-  food_id: string
+  food_id?: string | null
+  food_name: string
+  food_image_url: string
+  food_category_name?: string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Date | string
 }
 
 export type spin_historyUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  food_name?: Prisma.StringFieldUpdateOperationsInput | string
+  food_image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  food_category_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -276,7 +330,10 @@ export type spin_historyUpdateManyMutationInput = {
 export type spin_historyUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
-  food_id?: Prisma.StringFieldUpdateOperationsInput | string
+  food_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  food_name?: Prisma.StringFieldUpdateOperationsInput | string
+  food_image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  food_category_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -295,6 +352,9 @@ export type spin_historyCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   food_id?: Prisma.SortOrder
+  food_name?: Prisma.SortOrder
+  food_image_url?: Prisma.SortOrder
+  food_category_name?: Prisma.SortOrder
   filters?: Prisma.SortOrder
   spun_at?: Prisma.SortOrder
 }
@@ -303,6 +363,9 @@ export type spin_historyMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   food_id?: Prisma.SortOrder
+  food_name?: Prisma.SortOrder
+  food_image_url?: Prisma.SortOrder
+  food_category_name?: Prisma.SortOrder
   spun_at?: Prisma.SortOrder
 }
 
@@ -310,6 +373,9 @@ export type spin_historyMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   food_id?: Prisma.SortOrder
+  food_name?: Prisma.SortOrder
+  food_image_url?: Prisma.SortOrder
+  food_category_name?: Prisma.SortOrder
   spun_at?: Prisma.SortOrder
 }
 
@@ -399,6 +465,9 @@ export type spin_historyUncheckedUpdateManyWithoutUsersNestedInput = {
 
 export type spin_historyCreateWithoutFoodsInput = {
   id?: string
+  food_name: string
+  food_image_url: string
+  food_category_name?: string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Date | string
   users: Prisma.usersCreateNestedOneWithoutSpin_historyInput
@@ -407,6 +476,9 @@ export type spin_historyCreateWithoutFoodsInput = {
 export type spin_historyUncheckedCreateWithoutFoodsInput = {
   id?: string
   user_id: string
+  food_name: string
+  food_image_url: string
+  food_category_name?: string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Date | string
 }
@@ -443,21 +515,30 @@ export type spin_historyScalarWhereInput = {
   NOT?: Prisma.spin_historyScalarWhereInput | Prisma.spin_historyScalarWhereInput[]
   id?: Prisma.UuidFilter<"spin_history"> | string
   user_id?: Prisma.UuidFilter<"spin_history"> | string
-  food_id?: Prisma.UuidFilter<"spin_history"> | string
+  food_id?: Prisma.UuidNullableFilter<"spin_history"> | string | null
+  food_name?: Prisma.StringFilter<"spin_history"> | string
+  food_image_url?: Prisma.StringFilter<"spin_history"> | string
+  food_category_name?: Prisma.StringNullableFilter<"spin_history"> | string | null
   filters?: Prisma.JsonNullableFilter<"spin_history">
   spun_at?: Prisma.DateTimeFilter<"spin_history"> | Date | string
 }
 
 export type spin_historyCreateWithoutUsersInput = {
   id?: string
+  food_name: string
+  food_image_url: string
+  food_category_name?: string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Date | string
-  foods: Prisma.foodsCreateNestedOneWithoutSpin_historyInput
+  foods?: Prisma.foodsCreateNestedOneWithoutSpin_historyInput
 }
 
 export type spin_historyUncheckedCreateWithoutUsersInput = {
   id?: string
-  food_id: string
+  food_id?: string | null
+  food_name: string
+  food_image_url: string
+  food_category_name?: string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Date | string
 }
@@ -491,12 +572,18 @@ export type spin_historyUpdateManyWithWhereWithoutUsersInput = {
 export type spin_historyCreateManyFoodsInput = {
   id?: string
   user_id: string
+  food_name: string
+  food_image_url: string
+  food_category_name?: string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Date | string
 }
 
 export type spin_historyUpdateWithoutFoodsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  food_name?: Prisma.StringFieldUpdateOperationsInput | string
+  food_image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  food_category_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.usersUpdateOneRequiredWithoutSpin_historyNestedInput
@@ -505,6 +592,9 @@ export type spin_historyUpdateWithoutFoodsInput = {
 export type spin_historyUncheckedUpdateWithoutFoodsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  food_name?: Prisma.StringFieldUpdateOperationsInput | string
+  food_image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  food_category_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -512,34 +602,49 @@ export type spin_historyUncheckedUpdateWithoutFoodsInput = {
 export type spin_historyUncheckedUpdateManyWithoutFoodsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  food_name?: Prisma.StringFieldUpdateOperationsInput | string
+  food_image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  food_category_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type spin_historyCreateManyUsersInput = {
   id?: string
-  food_id: string
+  food_id?: string | null
+  food_name: string
+  food_image_url: string
+  food_category_name?: string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Date | string
 }
 
 export type spin_historyUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  food_name?: Prisma.StringFieldUpdateOperationsInput | string
+  food_image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  food_category_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  foods?: Prisma.foodsUpdateOneRequiredWithoutSpin_historyNestedInput
+  foods?: Prisma.foodsUpdateOneWithoutSpin_historyNestedInput
 }
 
 export type spin_historyUncheckedUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  food_id?: Prisma.StringFieldUpdateOperationsInput | string
+  food_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  food_name?: Prisma.StringFieldUpdateOperationsInput | string
+  food_image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  food_category_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type spin_historyUncheckedUpdateManyWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  food_id?: Prisma.StringFieldUpdateOperationsInput | string
+  food_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  food_name?: Prisma.StringFieldUpdateOperationsInput | string
+  food_image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  food_category_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   filters?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   spun_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -550,9 +655,12 @@ export type spin_historySelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   user_id?: boolean
   food_id?: boolean
+  food_name?: boolean
+  food_image_url?: boolean
+  food_category_name?: boolean
   filters?: boolean
   spun_at?: boolean
-  foods?: boolean | Prisma.foodsDefaultArgs<ExtArgs>
+  foods?: boolean | Prisma.spin_history$foodsArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["spin_history"]>
 
@@ -560,9 +668,12 @@ export type spin_historySelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   user_id?: boolean
   food_id?: boolean
+  food_name?: boolean
+  food_image_url?: boolean
+  food_category_name?: boolean
   filters?: boolean
   spun_at?: boolean
-  foods?: boolean | Prisma.foodsDefaultArgs<ExtArgs>
+  foods?: boolean | Prisma.spin_history$foodsArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["spin_history"]>
 
@@ -570,9 +681,12 @@ export type spin_historySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   user_id?: boolean
   food_id?: boolean
+  food_name?: boolean
+  food_image_url?: boolean
+  food_category_name?: boolean
   filters?: boolean
   spun_at?: boolean
-  foods?: boolean | Prisma.foodsDefaultArgs<ExtArgs>
+  foods?: boolean | Prisma.spin_history$foodsArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["spin_history"]>
 
@@ -580,34 +694,40 @@ export type spin_historySelectScalar = {
   id?: boolean
   user_id?: boolean
   food_id?: boolean
+  food_name?: boolean
+  food_image_url?: boolean
+  food_category_name?: boolean
   filters?: boolean
   spun_at?: boolean
 }
 
-export type spin_historyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "food_id" | "filters" | "spun_at", ExtArgs["result"]["spin_history"]>
+export type spin_historyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "food_id" | "food_name" | "food_image_url" | "food_category_name" | "filters" | "spun_at", ExtArgs["result"]["spin_history"]>
 export type spin_historyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  foods?: boolean | Prisma.foodsDefaultArgs<ExtArgs>
+  foods?: boolean | Prisma.spin_history$foodsArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }
 export type spin_historyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  foods?: boolean | Prisma.foodsDefaultArgs<ExtArgs>
+  foods?: boolean | Prisma.spin_history$foodsArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }
 export type spin_historyIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  foods?: boolean | Prisma.foodsDefaultArgs<ExtArgs>
+  foods?: boolean | Prisma.spin_history$foodsArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }
 
 export type $spin_historyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "spin_history"
   objects: {
-    foods: Prisma.$foodsPayload<ExtArgs>
+    foods: Prisma.$foodsPayload<ExtArgs> | null
     users: Prisma.$usersPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     user_id: string
-    food_id: string
+    food_id: string | null
+    food_name: string
+    food_image_url: string
+    food_category_name: string | null
     filters: runtime.JsonValue | null
     spun_at: Date
   }, ExtArgs["result"]["spin_history"]>
@@ -1004,7 +1124,7 @@ readonly fields: spin_historyFieldRefs;
  */
 export interface Prisma__spin_historyClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  foods<T extends Prisma.foodsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.foodsDefaultArgs<ExtArgs>>): Prisma.Prisma__foodsClient<runtime.Types.Result.GetResult<Prisma.$foodsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  foods<T extends Prisma.spin_history$foodsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.spin_history$foodsArgs<ExtArgs>>): Prisma.Prisma__foodsClient<runtime.Types.Result.GetResult<Prisma.$foodsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   users<T extends Prisma.usersDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.usersDefaultArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1038,6 +1158,9 @@ export interface spin_historyFieldRefs {
   readonly id: Prisma.FieldRef<"spin_history", 'String'>
   readonly user_id: Prisma.FieldRef<"spin_history", 'String'>
   readonly food_id: Prisma.FieldRef<"spin_history", 'String'>
+  readonly food_name: Prisma.FieldRef<"spin_history", 'String'>
+  readonly food_image_url: Prisma.FieldRef<"spin_history", 'String'>
+  readonly food_category_name: Prisma.FieldRef<"spin_history", 'String'>
   readonly filters: Prisma.FieldRef<"spin_history", 'Json'>
   readonly spun_at: Prisma.FieldRef<"spin_history", 'DateTime'>
 }
@@ -1438,6 +1561,25 @@ export type spin_historyDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many spin_histories to delete.
    */
   limit?: number
+}
+
+/**
+ * spin_history.foods
+ */
+export type spin_history$foodsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the foods
+   */
+  select?: Prisma.foodsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the foods
+   */
+  omit?: Prisma.foodsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.foodsInclude<ExtArgs> | null
+  where?: Prisma.foodsWhereInput
 }
 
 /**

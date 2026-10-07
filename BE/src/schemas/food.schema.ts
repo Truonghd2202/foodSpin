@@ -15,6 +15,8 @@ const mealTimesFormValue = z.preprocess((value) => {
   return value;
 }, z.array(mealTimeSchema).max(4).optional());
 
+const nullableCategoryId = z.preprocess((value) => value === "" ? null : value, z.string().uuid().nullable());
+
 export const createFoodSchema = z.object({
   name: z.string().trim().min(1).max(150),
   categoryId: z.string().uuid().optional(),
@@ -24,7 +26,7 @@ export const createFoodSchema = z.object({
   vegetarian: booleanFormValue.optional().default(false),
 });
 
-export const updateFoodSchema = createFoodSchema.partial();
+export const updateFoodSchema = createFoodSchema.partial().extend({ categoryId: nullableCategoryId.optional() });
 
 export const foodIdSchema = z.object({ id: z.string().uuid() });
 

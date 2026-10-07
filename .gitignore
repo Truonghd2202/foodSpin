@@ -1,3 +1,31 @@
-node_modules
-dist
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+.vite/
+.turbo/
+.vercel/
+
+# Local environment and secrets (keep *.env.example templates)
 .env
+.env.*
+!.env.example
+!.env.*.example
+
+# TypeScript/compiler caches
+*.tsbuildinfo
+
+# Logs and local debug output
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/

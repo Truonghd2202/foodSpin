@@ -1,5 +1,5 @@
 import prisma from "../config/database.js";
-import { uploadImage } from "./upload.service.js";
+import { deleteImage, uploadImage } from "./upload.service.js";
 
 const foodInclude = {
   categories: true,
@@ -55,7 +55,7 @@ export async function listFoodsByOwner(userId: string) {
 
 export async function listAccessibleFoods(userId: string) {
   const foods = await prisma.foods.findMany({
-    where: { OR: [{ owner_id: null }, { owner_id: userId }] },
+    where: { is_active: true, OR: [{ owner_id: null }, { owner_id: userId }] },
     include: foodInclude,
     orderBy: { name: "asc" },
   });
@@ -65,6 +65,7 @@ export async function listAccessibleFoods(userId: string) {
 export async function listEnabledFoods(userId: string) {
   const foods = await prisma.foods.findMany({
     where: {
+      is_active: true,
       OR: [{ owner_id: null }, { owner_id: userId }],
       NOT: {
         user_food_preferences: { some: { user_id: userId, is_enabled: false } },
@@ -79,6 +80,7 @@ export async function listEnabledFoods(userId: string) {
 export async function listFavoriteFoods(userId: string) {
   const foods = await prisma.foods.findMany({
     where: {
+      is_active: true,
       OR: [{ owner_id: null }, { owner_id: userId }],
       user_food_preferences: { some: { user_id: userId, is_favorite: true } },
     },
@@ -100,29 +102,36 @@ export async function createFood(
   },
   file: Express.Multer.File,
 ) {
-  const image = await uploadImage(file);
-  const food = await prisma.$transaction(async (transaction) => {
-    const created = await transaction.foods.create({
+  const image = await uploadImage(file.buffer, file.mimetype);
+  let food;
+  try {
+    food = await prisma.$transaction(async (transaction) => {
+      const created = await transaction.foods.create({
       data: {
         owner_id: userId,
         category_id: input.categoryId ?? null,
         name: input.name,
         image_url: image.secureUrl,
+        image_public_id: image.publicId,
         description: input.description ?? null,
         spicy: input.spicy,
         vegetarian: input.vegetarian,
       },
     });
 
-    if (input.mealTimes?.length) {
-      await transaction.food_meal_times.createMany({
-        data: input.mealTimes.map((mealTime) => ({ food_id: created.id, meal_time: mealTime })),
-        skipDuplicates: true,
-      });
-    }
+      if (input.mealTimes?.length) {
+        await transaction.food_meal_times.createMany({
+          data: input.mealTimes.map((mealTime) => ({ food_id: created.id, meal_time: mealTime })),
+          skipDuplicates: true,
+        });
+      }
 
-    return transaction.foods.findUniqueOrThrow({ where: { id: created.id }, include: foodInclude });
-  });
+      return transaction.foods.findUniqueOrThrow({ where: { id: created.id }, include: foodInclude });
+    });
+  } catch (error) {
+    void deleteImage(image.publicId).catch((cleanupError) => console.error("Cloudinary create rollback cleanup failed", { cleanupError }));
+    throw error;
+  }
 
   return mapFood(food, userId);
 }
@@ -132,7 +141,7 @@ export async function updateFood(
   userId: string,
   input: {
     name?: string;
-    categoryId?: string;
+    categoryId?: string | null;
     mealTimes?: string[];
     description?: string;
     spicy?: boolean;
@@ -140,9 +149,13 @@ export async function updateFood(
   },
   file?: Express.Multer.File,
 ) {
-  const image = file ? await uploadImage(file) : undefined;
-  const food = await prisma.$transaction(async (transaction) => {
-    await transaction.foods.update({
+  const existing = await findAccessibleFood(foodId, userId);
+  if (!existing || existing.owner_id !== userId) throw new Error("FOOD_NOT_FOUND");
+  const image = file ? await uploadImage(file.buffer, file.mimetype) : undefined;
+  let food;
+  try {
+    food = await prisma.$transaction(async (transaction) => {
+      await transaction.foods.update({
       where: { id: foodId },
       data: {
         ...(input.name !== undefined && { name: input.name }),
@@ -150,33 +163,45 @@ export async function updateFood(
         ...(input.description !== undefined && { description: input.description }),
         ...(input.spicy !== undefined && { spicy: input.spicy }),
         ...(input.vegetarian !== undefined && { vegetarian: input.vegetarian }),
-        ...(image && { image_url: image.secureUrl }),
+        ...(image && { image_url: image.secureUrl, image_public_id: image.publicId }),
+        updated_at: new Date(),
       },
     });
 
-    if (input.mealTimes !== undefined) {
-      await transaction.food_meal_times.deleteMany({ where: { food_id: foodId } });
-      await transaction.food_meal_times.createMany({
-        data: input.mealTimes.map((mealTime) => ({ food_id: foodId, meal_time: mealTime })),
-        skipDuplicates: true,
-      });
-    }
+      if (input.mealTimes !== undefined) {
+        await transaction.food_meal_times.deleteMany({ where: { food_id: foodId } });
+        await transaction.food_meal_times.createMany({
+          data: input.mealTimes.map((mealTime) => ({ food_id: foodId, meal_time: mealTime })),
+          skipDuplicates: true,
+        });
+      }
 
-    return transaction.foods.findUniqueOrThrow({ where: { id: foodId }, include: foodInclude });
-  });
+      return transaction.foods.findUniqueOrThrow({ where: { id: foodId }, include: foodInclude });
+    });
+  } catch (error) {
+    if (image) void deleteImage(image.publicId).catch((cleanupError) => console.error("Cloudinary update rollback cleanup failed", { foodId, cleanupError }));
+    throw error;
+  }
+
+  if (image && existing.image_public_id) {
+    void deleteImage(existing.image_public_id).catch((error) => console.error("Cloudinary replacement cleanup failed", { foodId, error }));
+  }
 
   return mapFood(food, userId);
 }
 
-export async function deleteFood(foodId: string) {
+export async function deleteFood(foodId: string, imagePublicId?: string | null) {
   await prisma.foods.delete({ where: { id: foodId } });
+  if (imagePublicId) {
+    void deleteImage(imagePublicId).catch((error) => console.error("Cloudinary deletion cleanup failed", { foodId, error }));
+  }
 }
 
 export async function setFavorite(foodId: string, userId: string, isFavorite: boolean) {
   await prisma.user_food_preferences.upsert({
     where: { user_id_food_id: { user_id: userId, food_id: foodId } },
     create: { user_id: userId, food_id: foodId, is_favorite: isFavorite },
-    update: { is_favorite: isFavorite },
+    update: { is_favorite: isFavorite, updated_at: new Date() },
   });
   return { foodId, isFavorite };
 }
@@ -185,7 +210,7 @@ export async function setEnabled(foodId: string, userId: string, isEnabled: bool
   await prisma.user_food_preferences.upsert({
     where: { user_id_food_id: { user_id: userId, food_id: foodId } },
     create: { user_id: userId, food_id: foodId, is_enabled: isEnabled },
-    update: { is_enabled: isEnabled },
+    update: { is_enabled: isEnabled, updated_at: new Date() },
   });
   return { foodId, isEnabled };
 }

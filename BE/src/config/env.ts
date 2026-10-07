@@ -18,4 +18,7 @@ for (const variable of requiredVariables) {
 
 export const env = {
   port: Number(process.env.PORT) || 3000,
+  nodeEnv: process.env.NODE_ENV ?? "development",
+  webOrigin: process.env.WEB_ORIGIN ?? "http://localhost:5173",
+  refreshCookieName: "foodspin_refresh",
 };

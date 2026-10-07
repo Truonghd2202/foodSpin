@@ -30,6 +30,7 @@ export type FoodsMinAggregateOutputType = {
   category_id: string | null
   name: string | null
   image_url: string | null
+  image_public_id: string | null
   description: string | null
   spicy: boolean | null
   vegetarian: boolean | null
@@ -44,6 +45,7 @@ export type FoodsMaxAggregateOutputType = {
   category_id: string | null
   name: string | null
   image_url: string | null
+  image_public_id: string | null
   description: string | null
   spicy: boolean | null
   vegetarian: boolean | null
@@ -58,6 +60,7 @@ export type FoodsCountAggregateOutputType = {
   category_id: number
   name: number
   image_url: number
+  image_public_id: number
   description: number
   spicy: number
   vegetarian: number
@@ -74,6 +77,7 @@ export type FoodsMinAggregateInputType = {
   category_id?: true
   name?: true
   image_url?: true
+  image_public_id?: true
   description?: true
   spicy?: true
   vegetarian?: true
@@ -88,6 +92,7 @@ export type FoodsMaxAggregateInputType = {
   category_id?: true
   name?: true
   image_url?: true
+  image_public_id?: true
   description?: true
   spicy?: true
   vegetarian?: true
@@ -102,6 +107,7 @@ export type FoodsCountAggregateInputType = {
   category_id?: true
   name?: true
   image_url?: true
+  image_public_id?: true
   description?: true
   spicy?: true
   vegetarian?: true
@@ -189,6 +195,7 @@ export type FoodsGroupByOutputType = {
   category_id: string | null
   name: string
   image_url: string
+  image_public_id: string | null
   description: string | null
   spicy: boolean
   vegetarian: boolean
@@ -224,6 +231,7 @@ export type foodsWhereInput = {
   category_id?: Prisma.UuidNullableFilter<"foods"> | string | null
   name?: Prisma.StringFilter<"foods"> | string
   image_url?: Prisma.StringFilter<"foods"> | string
+  image_public_id?: Prisma.StringNullableFilter<"foods"> | string | null
   description?: Prisma.StringNullableFilter<"foods"> | string | null
   spicy?: Prisma.BoolFilter<"foods"> | boolean
   vegetarian?: Prisma.BoolFilter<"foods"> | boolean
@@ -243,6 +251,7 @@ export type foodsOrderByWithRelationInput = {
   category_id?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   image_url?: Prisma.SortOrder
+  image_public_id?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   spicy?: Prisma.SortOrder
   vegetarian?: Prisma.SortOrder
@@ -265,6 +274,7 @@ export type foodsWhereUniqueInput = Prisma.AtLeast<{
   category_id?: Prisma.UuidNullableFilter<"foods"> | string | null
   name?: Prisma.StringFilter<"foods"> | string
   image_url?: Prisma.StringFilter<"foods"> | string
+  image_public_id?: Prisma.StringNullableFilter<"foods"> | string | null
   description?: Prisma.StringNullableFilter<"foods"> | string | null
   spicy?: Prisma.BoolFilter<"foods"> | boolean
   vegetarian?: Prisma.BoolFilter<"foods"> | boolean
@@ -284,6 +294,7 @@ export type foodsOrderByWithAggregationInput = {
   category_id?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   image_url?: Prisma.SortOrder
+  image_public_id?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   spicy?: Prisma.SortOrder
   vegetarian?: Prisma.SortOrder
@@ -304,6 +315,7 @@ export type foodsScalarWhereWithAggregatesInput = {
   category_id?: Prisma.UuidNullableWithAggregatesFilter<"foods"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"foods"> | string
   image_url?: Prisma.StringWithAggregatesFilter<"foods"> | string
+  image_public_id?: Prisma.StringNullableWithAggregatesFilter<"foods"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"foods"> | string | null
   spicy?: Prisma.BoolWithAggregatesFilter<"foods"> | boolean
   vegetarian?: Prisma.BoolWithAggregatesFilter<"foods"> | boolean
@@ -316,6 +328,7 @@ export type foodsCreateInput = {
   id?: string
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -335,6 +348,7 @@ export type foodsUncheckedCreateInput = {
   category_id?: string | null
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -350,6 +364,7 @@ export type foodsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -369,6 +384,7 @@ export type foodsUncheckedUpdateInput = {
   category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -386,6 +402,7 @@ export type foodsCreateManyInput = {
   category_id?: string | null
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -398,6 +415,7 @@ export type foodsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -412,6 +430,7 @@ export type foodsUncheckedUpdateManyInput = {
   category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -441,6 +460,7 @@ export type foodsCountOrderByAggregateInput = {
   category_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   image_url?: Prisma.SortOrder
+  image_public_id?: Prisma.SortOrder
   description?: Prisma.SortOrder
   spicy?: Prisma.SortOrder
   vegetarian?: Prisma.SortOrder
@@ -455,6 +475,7 @@ export type foodsMaxOrderByAggregateInput = {
   category_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   image_url?: Prisma.SortOrder
+  image_public_id?: Prisma.SortOrder
   description?: Prisma.SortOrder
   spicy?: Prisma.SortOrder
   vegetarian?: Prisma.SortOrder
@@ -469,12 +490,18 @@ export type foodsMinOrderByAggregateInput = {
   category_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   image_url?: Prisma.SortOrder
+  image_public_id?: Prisma.SortOrder
   description?: Prisma.SortOrder
   spicy?: Prisma.SortOrder
   vegetarian?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+}
+
+export type FoodsNullableScalarRelationFilter = {
+  is?: Prisma.foodsWhereInput | null
+  isNot?: Prisma.foodsWhereInput | null
 }
 
 export type foodsCreateNestedManyWithoutCategoriesInput = {
@@ -547,10 +574,12 @@ export type foodsCreateNestedOneWithoutSpin_historyInput = {
   connect?: Prisma.foodsWhereUniqueInput
 }
 
-export type foodsUpdateOneRequiredWithoutSpin_historyNestedInput = {
+export type foodsUpdateOneWithoutSpin_historyNestedInput = {
   create?: Prisma.XOR<Prisma.foodsCreateWithoutSpin_historyInput, Prisma.foodsUncheckedCreateWithoutSpin_historyInput>
   connectOrCreate?: Prisma.foodsCreateOrConnectWithoutSpin_historyInput
   upsert?: Prisma.foodsUpsertWithoutSpin_historyInput
+  disconnect?: Prisma.foodsWhereInput | boolean
+  delete?: Prisma.foodsWhereInput | boolean
   connect?: Prisma.foodsWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.foodsUpdateToOneWithWhereWithoutSpin_historyInput, Prisma.foodsUpdateWithoutSpin_historyInput>, Prisma.foodsUncheckedUpdateWithoutSpin_historyInput>
 }
@@ -615,6 +644,7 @@ export type foodsCreateWithoutCategoriesInput = {
   id?: string
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -632,6 +662,7 @@ export type foodsUncheckedCreateWithoutCategoriesInput = {
   owner_id?: string | null
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -678,6 +709,7 @@ export type foodsScalarWhereInput = {
   category_id?: Prisma.UuidNullableFilter<"foods"> | string | null
   name?: Prisma.StringFilter<"foods"> | string
   image_url?: Prisma.StringFilter<"foods"> | string
+  image_public_id?: Prisma.StringNullableFilter<"foods"> | string | null
   description?: Prisma.StringNullableFilter<"foods"> | string | null
   spicy?: Prisma.BoolFilter<"foods"> | boolean
   vegetarian?: Prisma.BoolFilter<"foods"> | boolean
@@ -690,6 +722,7 @@ export type foodsCreateWithoutFood_meal_timesInput = {
   id?: string
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -708,6 +741,7 @@ export type foodsUncheckedCreateWithoutFood_meal_timesInput = {
   category_id?: string | null
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -738,6 +772,7 @@ export type foodsUpdateWithoutFood_meal_timesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -756,6 +791,7 @@ export type foodsUncheckedUpdateWithoutFood_meal_timesInput = {
   category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -770,6 +806,7 @@ export type foodsCreateWithoutSpin_historyInput = {
   id?: string
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -788,6 +825,7 @@ export type foodsUncheckedCreateWithoutSpin_historyInput = {
   category_id?: string | null
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -818,6 +856,7 @@ export type foodsUpdateWithoutSpin_historyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -836,6 +875,7 @@ export type foodsUncheckedUpdateWithoutSpin_historyInput = {
   category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -850,6 +890,7 @@ export type foodsCreateWithoutUser_food_preferencesInput = {
   id?: string
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -868,6 +909,7 @@ export type foodsUncheckedCreateWithoutUser_food_preferencesInput = {
   category_id?: string | null
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -898,6 +940,7 @@ export type foodsUpdateWithoutUser_food_preferencesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -916,6 +959,7 @@ export type foodsUncheckedUpdateWithoutUser_food_preferencesInput = {
   category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -930,6 +974,7 @@ export type foodsCreateWithoutUsersInput = {
   id?: string
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -947,6 +992,7 @@ export type foodsUncheckedCreateWithoutUsersInput = {
   category_id?: string | null
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -989,6 +1035,7 @@ export type foodsCreateManyCategoriesInput = {
   owner_id?: string | null
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -1001,6 +1048,7 @@ export type foodsUpdateWithoutCategoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1018,6 +1066,7 @@ export type foodsUncheckedUpdateWithoutCategoriesInput = {
   owner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1034,6 +1083,7 @@ export type foodsUncheckedUpdateManyWithoutCategoriesInput = {
   owner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1047,6 +1097,7 @@ export type foodsCreateManyUsersInput = {
   category_id?: string | null
   name: string
   image_url: string
+  image_public_id?: string | null
   description?: string | null
   spicy?: boolean
   vegetarian?: boolean
@@ -1059,6 +1110,7 @@ export type foodsUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1076,6 +1128,7 @@ export type foodsUncheckedUpdateWithoutUsersInput = {
   category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1092,6 +1145,7 @@ export type foodsUncheckedUpdateManyWithoutUsersInput = {
   category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   image_url?: Prisma.StringFieldUpdateOperationsInput | string
+  image_public_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spicy?: Prisma.BoolFieldUpdateOperationsInput | boolean
   vegetarian?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1155,6 +1209,7 @@ export type foodsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   category_id?: boolean
   name?: boolean
   image_url?: boolean
+  image_public_id?: boolean
   description?: boolean
   spicy?: boolean
   vegetarian?: boolean
@@ -1175,6 +1230,7 @@ export type foodsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   category_id?: boolean
   name?: boolean
   image_url?: boolean
+  image_public_id?: boolean
   description?: boolean
   spicy?: boolean
   vegetarian?: boolean
@@ -1191,6 +1247,7 @@ export type foodsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   category_id?: boolean
   name?: boolean
   image_url?: boolean
+  image_public_id?: boolean
   description?: boolean
   spicy?: boolean
   vegetarian?: boolean
@@ -1207,6 +1264,7 @@ export type foodsSelectScalar = {
   category_id?: boolean
   name?: boolean
   image_url?: boolean
+  image_public_id?: boolean
   description?: boolean
   spicy?: boolean
   vegetarian?: boolean
@@ -1215,7 +1273,7 @@ export type foodsSelectScalar = {
   updated_at?: boolean
 }
 
-export type foodsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "owner_id" | "category_id" | "name" | "image_url" | "description" | "spicy" | "vegetarian" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["foods"]>
+export type foodsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "owner_id" | "category_id" | "name" | "image_url" | "image_public_id" | "description" | "spicy" | "vegetarian" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["foods"]>
 export type foodsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   food_meal_times?: boolean | Prisma.foods$food_meal_timesArgs<ExtArgs>
   categories?: boolean | Prisma.foods$categoriesArgs<ExtArgs>
@@ -1248,6 +1306,7 @@ export type $foodsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     category_id: string | null
     name: string
     image_url: string
+    image_public_id: string | null
     description: string | null
     spicy: boolean
     vegetarian: boolean
@@ -1687,6 +1746,7 @@ export interface foodsFieldRefs {
   readonly category_id: Prisma.FieldRef<"foods", 'String'>
   readonly name: Prisma.FieldRef<"foods", 'String'>
   readonly image_url: Prisma.FieldRef<"foods", 'String'>
+  readonly image_public_id: Prisma.FieldRef<"foods", 'String'>
   readonly description: Prisma.FieldRef<"foods", 'String'>
   readonly spicy: Prisma.FieldRef<"foods", 'Boolean'>
   readonly vegetarian: Prisma.FieldRef<"foods", 'Boolean'>

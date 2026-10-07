@@ -1,12 +1,29 @@
 import type { Request, Response } from "express";
 
-import { loginSchema, refreshSchema, registerSchema } from "../schemas/auth.schema.js";
+import { loginSchema, registerSchema } from "../schemas/auth.schema.js";
 import {
   getCurrentUser,
   loginUser,
   refreshUserSession,
   registerUser,
 } from "../services/auth.service.js";
+import { env } from "../config/env.js";
+
+const cookieBaseOptions = {
+  httpOnly: true,
+  secure: env.nodeEnv === "production",
+  sameSite: "lax" as const,
+  path: "/api/auth",
+};
+const cookieOptions = {
+  ...cookieBaseOptions,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
+function sendSession(res: Response, session: Awaited<ReturnType<typeof loginUser>>) {
+  res.cookie(env.refreshCookieName, session.refreshToken, cookieOptions);
+  return { user: session.user, accessToken: session.accessToken };
+}
 
 export async function register(req: Request, res: Response) {
   const parsed = registerSchema.safeParse(req.body);
@@ -44,7 +61,7 @@ export async function login(req: Request, res: Response) {
   }
 
   try {
-    return res.json({ success: true, data: await loginUser(parsed.data) });
+    return res.json({ success: true, data: sendSession(res, await loginUser(parsed.data)) });
   } catch (error) {
     if (error instanceof Error && error.message === "INVALID_CREDENTIALS") {
       return res.status(401).json({ success: false, message: "Invalid email or password" });
@@ -56,14 +73,11 @@ export async function login(req: Request, res: Response) {
 }
 
 export async function refresh(req: Request, res: Response) {
-  const parsed = refreshSchema.safeParse(req.body);
-
-  if (!parsed.success) {
-    return res.status(400).json({ success: false, message: "Refresh token is required" });
-  }
+  const refreshToken = req.cookies?.[env.refreshCookieName];
+  if (typeof refreshToken !== "string") return res.status(401).json({ success: false, code: "REFRESH_REQUIRED", message: "Refresh cookie is required" });
 
   try {
-    return res.json({ success: true, data: await refreshUserSession(parsed.data.refreshToken) });
+    return res.json({ success: true, data: sendSession(res, await refreshUserSession(refreshToken)) });
   } catch {
     return res.status(401).json({
       success: false,
@@ -73,6 +87,7 @@ export async function refresh(req: Request, res: Response) {
 }
 
 export function logout(_req: Request, res: Response) {
+  res.clearCookie(env.refreshCookieName, cookieBaseOptions);
   return res.json({ success: true, data: { loggedOut: true } });
 }
 
